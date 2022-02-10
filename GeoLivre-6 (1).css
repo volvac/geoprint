@@ -9,8 +9,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap");
 @import url('https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;1,400;1,500&display=swap');
 
-
-
 /* 3. La définition de notre racine :  ----------------------------------- */
       :root {
         /* Notre palette couleur ----------------------------------- */
@@ -237,7 +235,6 @@
             }
         }
       /* k. Nos pages geoformat  ---------------*/
-      
 
         .popup-icon {
         display: none;}
