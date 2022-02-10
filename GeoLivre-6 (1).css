@@ -399,8 +399,6 @@
         [data-split-from] article img:first-child {
          margin-top: 0px;
         }
-        
-
 
 /* 6. Les éléments de nos pages -------------------------------------------------------- */
 
@@ -558,7 +556,7 @@
       }
       .map-container::before {
         content: attr(id);
-        color: blue;
+        color: white;
       }
       section.marker .marker p {
         font-family: var(--texte-font) !important;
