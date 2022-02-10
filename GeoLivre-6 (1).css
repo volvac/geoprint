@@ -1,0 +1,762 @@
+/* 1. Mes cartes personnalisées -----------------------------------   */
+
+#map-278,
+#el-p-28 {
+  display: none;
+}
+
+/* 2. L’appel des fonts :  ----------------------------------- */
+@import url("https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;1,400;1,500&display=swap');
+
+
+
+/* 3. La définition de notre racine :  ----------------------------------- */
+      :root {
+        /* Notre palette couleur ----------------------------------- */
+        --couleur-un: black;
+        --couleur-deux: white;
+        --couleur-gris: rgba(0, 0, 0, 0.45);
+        --couleur-gris-clair: rgba(17, 15, 15, 0.1);
+        
+        /* Notre filtre pour les images voir https://developer.mozilla.org/fr/docs/Web/CSS/filter----------------------------------- */
+        --image-filtre-nb: grayscale(100%); 
+
+        /* Style général ----------------------------------- */
+        --titre-font: "Syne", sans-serif;
+        --titre-couleur: black;
+
+        --texte-font: "Syne", sans-serif;
+        --texte-couleur: var(--couleur-un);
+        --geoformat-text-couleur: var(--couleur-un);
+        --texte-taille: 17px;
+
+        --citation-font: "Syne", sans-serif;
+        --citation-couleur: var(--couleur-gris);
+
+        /* Styles spécifiques aux différentes pages ----------------------------------- */ 
+        --couverture-titre-couleur: var(--couleur-un);
+        --couverture-titre-taille: 70px;
+        --couverture-titre-interligne: 84px;
+        --couverture-texte-couleur: var(--couleur-un);
+        --couverture-texte-taille: 22px;
+        --couverture-texte-interligne: 27px;
+        --couverture-texte-fond-couleur: rgba(255, 255, 255, 0.35);
+        --position-image-couv: -20%;
+
+        --texte-colophon: "Récit extrait de";
+        --marqueur-texte-nb-colonne: 1;
+
+        --article-text: 17px ;
+        --article-texte-interligne: 20px;
+        
+        --geoformat-titre-font: "Alegreya", serif;
+        --geoformat-titre-couleur: var(--couleur-un);
+        --geoformat-titre-taille: 4em;
+        --geoformat-titre-interligne: 1.1;
+        --geoformat-text-font: "Alegreya", serif;
+        --geoformat-text-couleur: var(--couleur-un);
+
+        --geoformat-chapitre-titre-taille: 35px;
+        --geoformat-chapitre-titre-interligne: 40px;
+
+        --geoformat-citation-font: "Alegreya", serif;
+        --geoformat-citation-couleur: var(--couleur-gris);
+        --geoformat-citation-taille: 17px ;
+        --geoformat-citation-interligne: 22px ;
+      }
+
+      .geoproject {
+        --print: booklet;
+      }
+
+/* 4. Le design du livre grâce à Paged.js --------------------- */
+
+      /* a. Les titres courants *---------------*/
+      aside.tags {
+        string-set: TitleRun content(text);
+      }
+      section.section header h2 {
+        string-set: GeoRun content(text);
+      }
+      section.maps header h2:not(section.marker header h2) {
+        string-set: LaGrandeCarte content(text);
+      }
+      section.site-info h1 {
+        string-set: SiteTitre content(text);
+      }
+      section.site-info p.url {
+        string-set: SiteURL content(text);
+      }
+      /* b. Les pages blanches ---------------*/
+      @page :blank {
+        @top-left-corner { content: none;}
+        @top-left { content: none;}
+        @top-center { content: none;}
+        @top-right { content: none;}
+        @top-right-corner { content: none;}
+        @right-top { content: none;}
+        @right-middle { content: none;}
+        @right-bottom { content: none;}
+        @bottom-right-corner { content: none;}
+        @bottom-right { content: none;}
+        @bottom-center { content: none;}
+        @bottom-left { content: none;}
+        @bottom-left-corner { content: none;}
+        @left-bottom { content: none;}
+        @left-middle { content: none;}
+        @left-top { content: none;}
+      }
+      /* c. Le format de notre livre ---------------*/
+      @page {
+        margin: 5mm 10mm 10mm;
+        size: 148mm 210mm;
+      }
+      /* d. Nos pages de gauche ---------------*/
+      @page:left {
+        @bottom-center {
+          content: counter(page) " • " "#" string(TitleRun);
+          font-size: 8pt;
+          font-family: var(--texte-font);
+          color: var(--couleur-un);
+          text-align: left;
+        }
+      }
+      /* e. Nos pages de droite ---------------*/
+      @page:right {
+        @bottom-center {
+          content: "#" string(TitleRun) " • " counter(page);
+          font-size: 8pt;
+          font-family: var(--texte-font);
+          color: var(--couleur-un);
+          text-align: right;
+        }
+      }
+      /* f. Notre page de couverture ---------------*/
+ 
+      section.project {
+        page: couverture;
+        page-break-after: always;
+      }
+      @page couverture {
+        margin: 5mm;
+        @bottom-center {
+          content: "";
+        }
+      }
+    /* Notre page colophon ---------------*/
+      section.site-info {
+        page: colophon ;
+      }
+      @page colophon {
+        @bottom-center {
+          content: "";
+        }
+      }
+
+      section.project + section.post {
+        page-break-before: right !important;
+      }
+      /* g. Nos pages article  ---------------*/
+      section.post {
+        page: article;
+        page-break-before: always;
+      }
+      @page article:nth(2) {
+       margin-top: 20mm;
+      }
+    
+      /* h. Nos pages cartes  ---------------*/
+      section.maps {
+        page: carte;
+        page-break-before: always;
+      }
+      @page carte {
+        background-color: rgba(196, 196, 196, 0.5);
+      }
+      /* i. Nos pages marqueurs-carte  ---------------*/
+      section.marker {
+        page: marqueur;
+      }
+      @page marqueur {
+        margin: 15mm;
+        background-color: rgba(196, 196, 196, 0.5);
+      }
+      @page marqueur:left {
+        @top-left {
+          content: string(LaGrandeCarte);
+          font-size: 8pt;
+          font-family: var(--texte-font);
+          color: var(--couleur-un);
+        }
+      }
+      @page marqueur:right {
+        @top-right {
+          content: string(LaGrandeCarte);
+          font-size: 8pt;
+          font-family: var(--texte-font);
+          color: var(--couleur-un);
+          text-align: right;
+        }
+      }
+      
+      /* j. Nos pages geoformat: l'introduction  ---------------*/
+      .pagedjs_left_page .pagedjs_Geoformat_page .pagedjs_margin-top-left .pagedjs_margin-content,
+      .pagedjs_right_page .pagedjs_Geoformat_page .pagedjs_margin-top-right .pagedjs_margin-content {
+            width: auto;
+            background-color: var(--couleur-gris-clair);
+            padding: 1mm; 
+        }
+
+
+      section.intro {
+        page: GeOverture;
+        page-break-before: left;
+      }
+        @page GeOverture {
+            @bottom-center {
+            content: "";
+            }
+        }
+        @page GeOverture:right {
+            
+            @bottom-center {
+            content: "";
+            }
+            @top-right {
+                content: "Geoformat";
+                width: 28mm;
+                transform: rotate(90deg);
+                transform-origin: right;
+                position: relative;
+                top: 36mm;
+                right: -3mm;
+                font-size: 8pt;
+                font-family: var(--texte-font);
+                color: var(--couleur-un);
+            }
+        }
+      /* k. Nos pages geoformat  ---------------*/
+      
+
+        .popup-icon {
+        display: none;}
+
+      section.section {
+        page: Geoformat;
+        page-break-before: always;
+      }
+      section.section h2 .meta {
+        display: none;
+      }
+        @page Geoformat {
+            margin: 15mm 5mm 15mm;
+            @bottom-center {
+            font-size: 8pt;
+            font-family: var(--texte-font);
+            color: var(--couleur-un);
+            text-align: center;
+            }
+        }
+        @page Geoformat:first { 
+                @bottom-center {
+                content: counter(page) !important;
+                }
+        }
+        @page Geoformat:right {
+            @top-right {
+                content: "Geoformat";
+                width: 28mm;
+                transform: rotate(90deg);
+                transform-origin: right;
+                position: relative;
+                top: 34mm;
+                right: 2mm;
+                font-size: 8pt;
+                font-family: var(--texte-font);
+                color: var(--couleur-un);
+            }
+            @bottom-center {
+                content: string(GeoRun) " • " counter(page);
+            }
+        }
+        
+        @page Geoformat:left {
+          @top-left {
+            content: "Geoformat";
+            width: 28mm;
+            height: 5mm;
+            transform: rotate(-90deg);
+            transform-origin: top left;
+            position: relative;
+            top: 29mm;
+            font-size: 8pt;
+            font-family: var(--texte-font);
+            color: var(--couleur-un);
+          }
+          @bottom-center {
+            content: counter(page) " • " string(GeoRun);
+          }
+        }
+
+/* 5. Notre style général :  -------------------------------------------------------- */
+
+    /* a. Les éléments à masquer ------------------------------------------------- */
+      .popup,
+      p.mapid,
+      p.tiles,
+      aside.tags,
+      p.display_image_une,
+      section.marker img.icon,
+      .easy-footnote-margin-adjust,
+      .easy-footnote {
+        display: none;
+      }
+    
+    /* b. Les caractères ------------------------------------------------- */
+
+
+
+      h1,
+      h2,
+      h3 {
+        font-family: var(--titre-font);
+      }
+      p,
+      pre,
+      figcaption {
+        font-family: var(--texte-font);
+      }
+      h6,
+      h6 > span {
+        font-family: var(--texte-font);
+        font-size: 15px;
+        color: var(--couleur-gris) !important;  
+        font-weight: 700;
+        margin-bottom: 0px;
+      }
+      blockquote {
+        font-family: var(--citation-font);
+        color: var(--citation-couleur);
+      }
+      section.geoformat h1,
+      section.geoformat h2,
+      section.geoformat h3 {
+        font-family: var(--geoformat-titre-font);
+        color: var(--geoformat-titre-couleur);
+      }
+      section.geoformat p,
+      section.geoformat pre,
+      section.geoformat figcaption {
+        font-family: var(--geoformat-text-font);
+        color: var(--geoformat-text-couleur);
+      }
+      section.post p {
+        font-size: var(--article-text);
+        line-height: var(--article-texte-interligne);
+      }
+      p {
+        font-size: var(--texte-taille);
+        line-height: 20px;
+        widows: 2;
+        orphans: 2;
+      }
+      section.post p,
+      section.maps p,
+      section.project p {
+        hyphens: none;
+      }
+
+      section.geoformat p {
+        hyphens: auto;
+      }
+      pre,
+      figcaption {
+        padding-left: 0px !important;
+        font-size: 0.8em;
+      }
+
+      img,
+      .map-container {
+        webkit-filter: var(--image-filtre-nb);
+        filter: var(--image-filtre-nb);
+      }
+      a {
+        text-decoration: none;
+        color: var(--color-body);
+      }
+
+      /* c. Les éléments de mise en page général ----------------------------------- */
+        [data-split-to] img:first-child {
+         margin-top: 0px;
+        }
+        [data-split-to] figure:first-child {
+         margin-top: 0px;
+        }
+        [data-split-to] article img:first-child {
+         margin-top: 0px;
+        }
+        [data-split-from] article img:first-child {
+         margin-top: 0px;
+        }
+        
+
+
+/* 6. Les éléments de nos pages -------------------------------------------------------- */
+
+      /* a. Les éléments de notre couverture : section.project --------------------- */
+      section.project {
+        position: relative;
+        height: 210mm;
+      }
+      h1.project-title {
+        font-family: var(--titre-font);
+        color: var(--couverture-titre-couleur);
+        font-weight: normal;
+        font-size: var(--couverture-titre-taille);
+        line-height: var(--couverture-titre-interligne);
+        margin-bottom: 0px;
+        margin-left: 5mm;
+      }
+      .project-content p {
+        font-size: var(--couverture-texte-taille);
+        line-height: var(--couverture-texte-interligne);
+        color: var(--couverture-texte-couleur) ;
+        max-width: 110mm;
+        margin-left: 5mm;
+        font-weight: 700;
+        hyphens: none;
+      }
+      .project-content p > span,
+      .project-content pre > span {
+        background-color: var(--couverture-texte-fond-couleur);
+      }
+      .project-content pre,
+      .project-content figcaption {
+        font-size: 25px;
+        max-width: 110mm;
+        margin-left: 5mm;
+      }
+      .project-date {
+        display: none;
+      }
+      .project-owner {
+        position: absolute;
+        bottom: 100px;
+        font-size: 12px;
+        padding: 2px 5px;
+        background-color: rgba(255, 255, 255, 0.35);
+        margin-left: 5mm;
+      }
+      section.project .project-cover {
+        position: absolute;
+        width: 138mm;
+        height: 200mm;
+        top: -20mm;
+        left: -10mm;
+        z-index: -100;
+        overflow: hidden;
+      }
+      .project-cover > img {
+        width: auto;
+        height: 100%;
+        margin-left: var(--position-image-couv);
+      }
+      /* Notre page colophon --------------------*/
+      section.site-info {
+        margin-top: 38em;
+      }
+      section.site-info:before {
+        content: var(--texte-colophon);
+        padding-right: 2mm;
+        font-family: var(--titre-font);
+      }
+      section.site-info h1 {
+        font-size: var(--texte-taille);
+      }
+      section.site-info p.url {
+        font-size: calc(0.9*var(--texte-taille));
+      }
+
+      /* b. Les éléments des pages articles et carte : section.post et section.map --------------------- */
+      .date-entry {
+        font-size: 9pt;
+        margin-bottom: 0px;
+      }
+      section.post header {
+        display: flex;
+        flex-direction: column;
+      }
+      h2 {
+        font-size: 35px;
+        font-weight: normal;
+      }
+      section.post header figure {
+        margin: 0px;
+      }
+      section.post .post-cover img,
+      section.post header img{
+        max-width: 128mm;
+        max-height: 85mm;
+        display: block;
+      }
+      section.post article p img,
+      section.post article img {
+        max-width: 128mm;
+        max-height: 85mm;
+        display: block;
+        width: auto;
+      }
+      section.maps .map-container:not(.map-marker .map-container) {
+        height: 20em;
+        width: 100%;
+        background: white;
+      }
+      section.maps p.western:not(blockquote p, .content p.western) {
+        font-size: 0.9em;
+        margin-right: 2cm;
+      }
+      blockquote {
+        margin-left: 0px;
+        page-break-inside: avoid;
+      }
+      blockquote::before {
+        content: "\00201C";
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        font-size: 4em;
+      }
+      blockquote p {
+        font-size: 1.2em;
+        margin: 0px 0px 0px 40px;
+      }
+      blockquote + pre {
+        page-break-before: avoid;
+      }
+
+      /* c. Les éléments des pages marqueurs : section.map-marker -------------------------------------------- */
+      section.marker {
+        display: flex;
+        flex-direction: column;
+      }
+      section.marker .map-marker {
+        order: 1;
+      }
+      section.marker header {
+        order: 2;
+      }
+      .markeronly {
+        height: 37em ;
+        width: 100%;
+        margin-bottom: 1em;
+        border: 7px solid black;
+      }
+      .map-container {
+        width: 440px;
+        height: 440px;
+      }
+      .map-container::before {
+        content: attr(id);
+        color: blue;
+      }
+      section.marker .marker p {
+        font-family: var(--texte-font) !important;
+        font-size: 0.8em;
+        margin: 0px;
+      }
+      section.marker .key {
+        margin-right: 20px;
+      }
+      section.marker .content {
+        page-break-before: always;
+      }
+      section.marker .content p {
+        text-align: left !important;
+        font-size: 0.9em;
+      }
+      section.marker .content{
+        columns: var(--marqueur-texte-nb-colonne);
+       
+      }
+      section.marker figure.image-grid {
+        margin: 0px;
+        padding: 0px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        max-width: 118mm;
+      }
+      section.marker figure.image-grid img {
+        width: 58mm !important;
+        padding: 0 1mm 1mm 0;
+      }
+      section.marker .content img {
+        width: 118mm;
+        height: auto;
+        max-height: 170mm;
+      }
+      section.marker .content img + pre {
+        page-break-before: avoid;
+      }
+      section.marker figure.slides {
+        max-width: 118mm;
+        margin: 0px;
+        padding: 0px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+      section.marker figure.slides img {
+        width: 59mm !important;
+        padding: 0 1mm 1mm 0;
+      }
+      section.marker  figure figcaption {
+        max-width: 118mm;
+      }
+      section.section figure,
+      section.marker  figure {
+       margin: 0px;
+      }
+     
+      p.frame,
+      .soundcite {
+        color: var(--couleur-gris);
+        margin-left: 1cm;
+        text-align: left;
+        font-size: 9pt !important;
+      }
+      
+      p.frame::before,
+      .soundcite::before {
+        content: "▶";
+        font-size: 1.1em;
+        padding-right: 7mm;
+        margin-left: -1cm;
+      }
+     
+      /* d. Les éléments des pages geoformat : .geoformat, .intro et .section ------------------------------*/
+      section.geoformat .meta {
+        display: none;
+      }
+      section.intro header {
+        position: relative;
+        height: 210mm;
+      }
+      section.intro figure.img-cover {
+        position: absolute;
+        width: 138mm;
+        height: 200mm;
+        top: -5mm;
+        left: -15mm;
+        z-index: -100;
+        overflow: hidden;
+      }
+      figure.img-cover img {
+        width: auto;
+        height: 100%;
+        margin-left: -50%;
+      }
+      section.geoformat h1 {
+        font-size: var(--geoformat-titre-taille);
+        line-height: var(--geoformat-titre-interligne);
+        margin: 1.5em 0px 0.4em;
+        text-align: center;
+      }
+      section.geoformat p.subline {
+        font-size: 2em;
+        margin: 0px;
+        line-height: 1.1em;
+        text-align: center;
+      }
+      section.intro p {
+        text-align: center !important;
+        font-size: 1.1em;
+        max-width: 118mm;
+        margin: 1em auto 0em;
+        hyphens: none;
+      }
+      section.geoformat blockquote {
+        font-family: var(--geoformat-citation-font);
+        color: var(--geoformat-citation-couleur);
+        margin: 2em 0px 0px;
+        text-align: center;
+        text-align-last: center;
+      }
+      section.geoformat blockquote p,
+      section.geoformat blockquote {
+        margin-left: 0px !important;
+        font-style: italic;
+        font-size: var(--geoformat-citation-taille);
+        line-height: var(--geoformat-citation-interligne);
+      }
+      section.geoformat blockquote::before {
+        content: "";
+      }
+      section.geoformat blockquote + pre,
+      section.geoformat blockquote pre {
+        text-align: center !important;
+        text-align-last: center;
+      }
+      /* Geoformat section ------------------------------*/
+      section.section header h2 {
+        margin-top: 0px;
+        margin-left: 15mm;
+        margin-right: 15mm;
+        font-size: var(--geoformat-chapitre-titre-taille);
+        line-height: var(--geoformat-chapitre-titre-interligne);
+      }
+      section.section h6,
+      section.section h6 > span {
+        color: var(--color-gris) !important;
+      }
+      section.section figure {
+       margin: 0px;
+       max-width: 108mm;
+      }
+      section.section header img {
+        width: 138mm;
+        height: auto;
+        max-height: 170mm;
+      }
+    
+      section.section .intro p {
+        font-style: italic;
+        font-size: 13pt;
+        line-height: 1.4;
+        color: var(--couleur-gris);
+        text-align: center;
+        hyphens: none;
+        width: 118mm;
+        margin: 0px auto;
+      }
+      section.section article {
+        font-family: var(--geoformat-text-font);
+        font-size: 12pt;
+        line-height: 14pt;
+        margin-left: 15mm;
+        margin-right: 15mm;
+        text-align: justify;
+        text-align-last: left;
+      }
+      section.section article pre {
+        margin-top: 0px;
+      }
+      section.section article img {
+        max-width: 108mm;
+        max-height: 90mm;
+        margin-top: 1em;
+        width: auto;
+        /* height: auto; */
+      }
+
+
+
+.geoformat > article {
+break-before: page;
+}
+      
+.map-container {
+--zoom-level: 11; 
+--map-center: LatLng(43.819544, 4.682429);
+}
